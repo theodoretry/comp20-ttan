@@ -1,4 +1,4 @@
-### COMP 20 LAB 4 README
+### COMP 20 LAB 4 (RESPONSIVE) README
 
 Theodore Tan
 18 Feb 2016
