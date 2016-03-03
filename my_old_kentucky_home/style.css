@@ -1,0 +1,29 @@
+/* Stylesheet for index.html - My Old Kentucky Home */
+
+h1 {
+        font-family: Garamond;
+        font-size: 30px;
+        font-variant: small-caps;       
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0;
+}
+
+#title {
+        font-weight: bold;
+        font-size: 40px;
+}
+
+video {
+       display: block;
+       margin: 0 auto;
+}
+
+img {
+        display: block;
+        max-width: 20%;
+        max-height: 20%;
+        width: auto;
+        height: auto;
+        margin: 0 auto 0 auto;
+}
