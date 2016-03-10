@@ -52,12 +52,16 @@ function renderMap() {
         myPos = new google.maps.LatLng(myLat, myLong);
         map.panTo(myPos);
 
-        // // Create a marker
-        // marker = new google.maps.Marker({
-        //         position: me,
-        //         title: "Here I Am!"
-        // });
-        // marker.setMap(map);
+        selfimage = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569";
+        peopleimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=wc-male|ADDE63";
+        landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|ADDE63";
+
+        // Self Marker
+        marker = new google.maps.Marker({
+                position: myPos,
+                icon: selfimage
+        });
+        marker.setMap(map);
                 
         // // Open info window on click of marker
         // google.maps.event.addListener(marker, 'click', function() {

@@ -3,12 +3,10 @@
 request = new XMLHttpRequest();
 
 function parse() {
-        // Step 1: Set Up the HTTP Request
         request.open("GET", "data.json", true);
 
-        // Step 2: Handle the Response
         request.onreadystatechange = function() {
-                if (request.readyState == 4) {
+                if (request.readyState == 4 && request.status == 200) {
                         data = request.responseText;
                         messages = JSON.parse(data);
                         elem = document.getElementById("messages");
@@ -19,7 +17,9 @@ function parse() {
                                                   "</p>" + "\n";
                         }
                 }
+                else if (request.readyState == 4 && request.status != 200) {
+                        elem.innerHTML = "<p>Unable to Load</p>";
+            }
         };
-        // Step 3: Fire Off The Request
         request.send(null);
 }
