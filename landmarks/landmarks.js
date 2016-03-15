@@ -58,11 +58,11 @@ function renderMap() {
         landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|3498DB";
 
         // Find the closest landmark and the distance from me
-        var dist = 0.0;
+        var dist = 100;
         for (i = 0; i < locations.landmarks.length; i++) {
                 curr_dist = haversine(locations.landmarks[i].geometry.coordinates[1], 
                                       locations.landmarks[i].geometry.coordinates[0]);
-                if (curr_dist > dist) {
+                if (curr_dist < dist) {
                         dist = curr_dist;
                         closest = locations.landmarks[i].properties.Location_Name;
                 }
@@ -73,7 +73,7 @@ function renderMap() {
                 position: myPos,
                 icon: selfimage,
                 initcontent: myLogin + " is here.",
-                content: "Closest Landmark: " + closest + "<br \>" + "Distance Away: " + dist
+                content: "Closest Landmark: " + closest + "<br \>" + "Distance Away: " + dist + " miles"
         });
         
         selfmarker.setMap(map);
@@ -89,12 +89,12 @@ function renderMap() {
         for (i = 0; i < locations.people.length; i++) {
                 var LatLng = new google.maps.LatLng(locations.people[i].lat, locations.people[i].lng);
                 var id = locations.people[i].login;
-                var dist = 3.14;
+                var dist = haversine(locations.people[i].lat, locations.people[i].lng);
 
                 peoplemarker = new google.maps.Marker({
                         position: LatLng,
                         icon: peopleimage,
-                        content: "Login: " + id + "<br \>" + "Distance Away: " + dist
+                        content: "Login: " + id + "<br \>" + "Distance Away: " + dist + " miles"
                 });
 
                 if (locations.people[i].login != myLogin) {
@@ -129,6 +129,32 @@ function renderMap() {
         }
 }
 
-function haversine (lat, long) {
-        return 3;
+function haversine(lat, lng) {
+  
+        function toRad(x) {
+                return x * Math.PI / 180;
+        }
+
+        var lon1 = lng;
+        var lat1 = lat;
+        var lon2 = myLong;
+        var lat2 = myLat;
+
+        var R = 6371; // km
+
+        var x1 = lat2 - lat1;
+        var dLat = toRad(x1);
+        var x2 = lon2 - lon1;
+        var dLon = toRad(x2)
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var dist = R * c;
+
+        dist /= 1.60934;
+        dist = dist.toFixed(2);
+
+        return dist;
 }
+
