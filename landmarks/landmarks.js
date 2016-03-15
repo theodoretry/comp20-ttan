@@ -78,13 +78,10 @@ function renderMap() {
         
         var toLandmark = new google.maps.Polyline({
                 path: distCoordinates,
-                geodesic: true,
                 strokeColor: '#000000',
                 strokeOpacity: 1.0,
                 strokeWeight: 2
         });
-
-        toLandmark.setMap(map);
 
         // Self Marker
         selfmarker = new google.maps.Marker({
@@ -101,6 +98,7 @@ function renderMap() {
         google.maps.event.addListener(selfmarker, 'click', function() {
                 infowindow.setContent(this.content);
                 infowindow.open(map, selfmarker);
+                toLandmark.setMap(map);
         });
 
         // Classmates Marker
