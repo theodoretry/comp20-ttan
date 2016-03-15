@@ -13,7 +13,7 @@ var setup = {
 
 var map;
 var marker;
-var window = new google.maps.InfoWindow();
+var infowindow = new google.maps.InfoWindow();
 
 function init() {
         map = new google.maps.Map(document.getElementById("map"), setup);
@@ -70,8 +70,8 @@ function renderMap() {
                                                     locations.people[i].lng);
 
                 peoplemarker = new google.maps.Marker({
-                position: LatLng,
-                icon: peopleimage
+                        position: LatLng,
+                        icon: peopleimage
                 });
 
                 if (locations.people[i].login != myLogin) {
@@ -84,10 +84,19 @@ function renderMap() {
                 var LatLng = new google.maps.LatLng(locations.landmarks[i].geometry.coordinates[1], 
                                                     locations.landmarks[i].geometry.coordinates[0]);
                 landmarkmarker = new google.maps.Marker({
-                position: LatLng,
-                icon: landmarkimage
+                        position: LatLng,
+                        icon: landmarkimage
                 });
+
                 landmarkmarker.setMap(map); 
+
+                // Open info window on click of marker
+                google.maps.event.addListener(landmarkmarker, 'click', (function(landmarkmarker, i) {
+                        return function() {
+                                infowindow.setContent(locations.landmarks[i].properties.Details);
+                                infowindow.open(map, landmarkmarker);
+                        }
+                })(landmarkmarker, i));
         }
                 
         // // Open info window on click of marker
