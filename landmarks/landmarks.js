@@ -2,6 +2,7 @@
 
 var myLat = 0.0;
 var myLong = 0.0;
+var myLogin = "RACHAEL_EDWARDS";
 var request = new XMLHttpRequest();
 var myPos = new google.maps.LatLng(myLat, myLong);
 var setup = {
@@ -25,7 +26,6 @@ function setMyLocation() {
                         myLat = position.coords.latitude;
                         myLong = position.coords.longitude;
                         parse();
-                        renderMap();
                 });
         }
         else {
@@ -34,7 +34,7 @@ function setMyLocation() {
 }
 
 function parse() {
-        params = "login=RACHAEL_EDWARDS&lat=" + myLat + "&lng=" + myLong;
+        params = "login=" + myLogin + "&lat=" + myLat + "&lng=" + myLong;
         request.open("POST", "https://defense-in-derpth.herokuapp.com/sendLocation", true);
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
@@ -43,6 +43,7 @@ function parse() {
                         data = request.responseText;
                         locations = JSON.parse(data);
                         console.log(locations); // DEBUG
+                        renderMap();
                 }
         };
         request.send(params);
@@ -57,11 +58,28 @@ function renderMap() {
         landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|ADDE63";
 
         // Self Marker
-        marker = new google.maps.Marker({
+        selfmarker = new google.maps.Marker({
                 position: myPos,
                 icon: selfimage
         });
-        marker.setMap(map);
+        selfmarker.setMap(map);
+
+        // Classmates Marker
+        console.log("Entering Loop");
+        for (i = 0; i < locations.people.length; i++) {
+                var LatLng = new google.maps.LatLng(locations.people[i].lat, 
+                                                    locations.people[i].lng);
+               
+                peoplemarker = new google.maps.Marker({
+                position: LatLng,
+                icon: peopleimage
+                });
+
+                if (locations.people[i].login != myLogin) {
+                        peoplemarker.setMap(map);
+                } 
+        }
+
                 
         // // Open info window on click of marker
         // google.maps.event.addListener(marker, 'click', function() {
