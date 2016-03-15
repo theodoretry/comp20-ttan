@@ -65,8 +65,26 @@ function renderMap() {
                 if (curr_dist < dist) {
                         dist = curr_dist;
                         closest = locations.landmarks[i].properties.Location_Name;
+                        clat = locations.landmarks[i].geometry.coordinates[1];
+                        clong = locations.landmarks[i].geometry.coordinates[0];
                 }
         }
+
+        // Draw polyline from closest landmark to me
+        var distCoordinates = [
+                {lat: clat, lng: clong},
+                {lat: myLat, lng: myLong}
+        ];
+        
+        var toLandmark = new google.maps.Polyline({
+                path: distCoordinates,
+                geodesic: true,
+                strokeColor: '#000000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+        });
+
+        toLandmark.setMap(map);
 
         // Self Marker
         selfmarker = new google.maps.Marker({
