@@ -57,26 +57,56 @@ function renderMap() {
         peopleimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=wc-male|ADDE63";
         landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|3498DB";
 
+        // Find the closest landmark and the distance from me
+        var dist = 0.0;
+        for (i = 0; i < locations.landmarks.length; i++) {
+                curr_dist = haversine(locations.landmarks[i].geometry.coordinates[1], 
+                                      locations.landmarks[i].geometry.coordinates[0]);
+                if (curr_dist > dist) {
+                        dist = curr_dist;
+                        closest = locations.landmarks[i].properties.Location_Name;
+                }
+        }
+
         // Self Marker
         selfmarker = new google.maps.Marker({
                 position: myPos,
-                icon: selfimage
+                icon: selfimage,
+                initcontent: myLogin + " is here.",
+                content: "Closest Landmark: " + closest + "<br \>" + "Distance Away: " + dist
         });
+        
         selfmarker.setMap(map);
+        infowindow.setContent(selfmarker.initcontent);
+        infowindow.open(map, selfmarker);
+
+        google.maps.event.addListener(selfmarker, 'click', function() {
+                infowindow.setContent(this.content);
+                infowindow.open(map, selfmarker);
+        });
 
         // Classmates Marker
         for (i = 0; i < locations.people.length; i++) {
-                var LatLng = new google.maps.LatLng(locations.people[i].lat, 
-                                                    locations.people[i].lng);
+                var LatLng = new google.maps.LatLng(locations.people[i].lat, locations.people[i].lng);
+                var id = locations.people[i].login;
+                var dist = 3.14;
 
                 peoplemarker = new google.maps.Marker({
                         position: LatLng,
-                        icon: peopleimage
+                        icon: peopleimage,
+                        content: "Login: " + id + "<br \>" + "Distance Away: " + dist
                 });
 
                 if (locations.people[i].login != myLogin) {
                         peoplemarker.setMap(map);
                 } 
+
+                google.maps.event.addListener(peoplemarker, 'click', (function(peoplemarker, i) {
+                        return function() {
+                                infowindow.setContent(this.content);
+                                infowindow.open(map, peoplemarker);
+                        }
+                })(peoplemarker, i));
         }
 
         // Landmarks Marker
@@ -85,23 +115,20 @@ function renderMap() {
                                                     locations.landmarks[i].geometry.coordinates[0]);
                 landmarkmarker = new google.maps.Marker({
                         position: LatLng,
-                        icon: landmarkimage
+                        icon: landmarkimage,
+                        content: locations.landmarks[i].properties.Details
                 });
 
                 landmarkmarker.setMap(map); 
-
-                // Open info window on click of marker
                 google.maps.event.addListener(landmarkmarker, 'click', (function(landmarkmarker, i) {
                         return function() {
-                                infowindow.setContent(locations.landmarks[i].properties.Details);
+                                infowindow.setContent(this.content);
                                 infowindow.open(map, landmarkmarker);
                         }
                 })(landmarkmarker, i));
         }
-                
-        // // Open info window on click of marker
-        // google.maps.event.addListener(marker, 'click', function() {
-        //         infowindow.setContent(marker.title);
-        //         infowindow.open(map, marker);
-        // });
+}
+
+function haversine (lat, long) {
+        return 3;
 }
