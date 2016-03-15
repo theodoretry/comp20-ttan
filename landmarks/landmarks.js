@@ -55,7 +55,7 @@ function renderMap() {
 
         selfimage = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569";
         peopleimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=wc-male|ADDE63";
-        landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|ADDE63";
+        landmarkimage = "http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=civic-building|3498DB";
 
         // Self Marker
         selfmarker = new google.maps.Marker({
@@ -65,11 +65,10 @@ function renderMap() {
         selfmarker.setMap(map);
 
         // Classmates Marker
-        console.log("Entering Loop");
         for (i = 0; i < locations.people.length; i++) {
                 var LatLng = new google.maps.LatLng(locations.people[i].lat, 
                                                     locations.people[i].lng);
-               
+
                 peoplemarker = new google.maps.Marker({
                 position: LatLng,
                 icon: peopleimage
@@ -80,6 +79,16 @@ function renderMap() {
                 } 
         }
 
+        // Landmarks Marker
+        for (i = 0; i < locations.landmarks.length; i++) {
+                var LatLng = new google.maps.LatLng(locations.landmarks[i].geometry.coordinates[1], 
+                                                    locations.landmarks[i].geometry.coordinates[0]);
+                landmarkmarker = new google.maps.Marker({
+                position: LatLng,
+                icon: landmarkimage
+                });
+                landmarkmarker.setMap(map); 
+        }
                 
         // // Open info window on click of marker
         // google.maps.event.addListener(marker, 'click', function() {
