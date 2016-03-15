@@ -42,7 +42,6 @@ function parse() {
                 if (request.readyState == 4) {
                         data = request.responseText;
                         locations = JSON.parse(data);
-                        console.log(locations); // DEBUG
                         renderMap();
                 }
         };

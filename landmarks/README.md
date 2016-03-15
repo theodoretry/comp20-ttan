@@ -8,11 +8,7 @@ Theodore Tan
 2. Thanks to Piazza and the links on the COMP20 website for helping me 
    understand the content. Special thanks to TA Jim Mao for clarifying concepts.
 
+   Code for the Haversine Formula is taken from: 
+   http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
+
 3. I have spent approximately 8 hours completing the assignment.
-
-4. Is it possible to request the data from a different origin or from your local
-   machine (from file:///) from using XMLHttpRequest? Why or why not?
-
-   No, it is not. Because of the same-origin policy, the XMLHttpRequest will 
-   only be successful if it is made to the host that served the initial webpage.
-   (i.e. the protocal, port, and host must all match)
