@@ -82,11 +82,13 @@ function renderMap() {
                 strokeWeight: 2
         });
 
+        toLandmark.setMap(map);
+
         // Self Marker
         selfmarker = new google.maps.Marker({
                 position: myPos,
                 icon: selfimage,
-                initcontent: myLogin + " is here.",
+                initcontent: myLogin,
                 content: "Closest Landmark: " + closest + "<br \>" + "Distance Away: " + dist + " miles"
         });
         
@@ -97,7 +99,6 @@ function renderMap() {
         google.maps.event.addListener(selfmarker, 'click', function() {
                 infowindow.setContent(this.content);
                 infowindow.open(map, selfmarker);
-                toLandmark.setMap(map);
         });
 
         // Classmates Marker
