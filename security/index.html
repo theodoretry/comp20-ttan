@@ -11,8 +11,8 @@
 <body>
 
         <div id = "header">
-                <h1>Security and Privacy Assessment of Client-Side and Server-Side Code</h1>
-                <h2>Prepared By: Theodore Tan</h2>
+        <h1>Security and Privacy Assessment of Client-Side and Server-Side Code</h1>
+        <h2>Prepared By: Theodore Tan</h2>
         </div>
 
         <h3>Introduction</h3>
@@ -50,23 +50,58 @@
         <h3>Issue #1 : Cross Site Scripting</h3>
 
         <ul>
-        <li>Location of Vulnerability: GET API executes javascript posted to the server by a malicious source</li>
+        <li>Location of Vulnerability: GET API executes javascript posted to the server by a malicious source.</li>
+        
         <li>Severity of Vulnerability: HIGH. XSS is one of the biggest security loopholes in the present day.
             It may possibly compromise clients who expect the server to be secure, as malicious javascript can
             be exected in their browser upon GET request.</li>
-        <li>Description of Vulnerability: 
+        
+        <li>Description of Injection: The data given to the server via the POST API is not escaped, and is
+            stored in the database exact as it is entered. For example, I have replaced the login parameter
+            with some javascript code instead of a valid login and the results are show below. The first photo 
+            describes the parameters sent using the POST API and the second photo shows the data being stored
+            in the database.
 
-        <img src="images/xssattack.png" alt="XSS Attack" title="Postman interface to make XSS attack" />
+        <table class="galleryTable"><tr><td><img src="images/xssattack.png" alt="XSS Attack" title="Postman interface to make XSS attack" /></td>
 
-        <img src="images/xssresult.png" alt="XSS Result" title="Client interface being hit by XSS Attack" />
+        <td><img src="images/xssdatabase.png" alt="XSS in Database" title="Injected javascript being stored in database" /></td></tr></table></li>
 
-        </li>
-        <li>Resolution: </li>
+        <li>Result of Injection: As can be seen in the image below, when a GET / request is sent to the server, the
+            malicious javascript in the database is returned to the client. This results in a pop-up window displaying
+            on the browser. In this case, I have chosen to do a harmless javascript injection, but a more malicious
+            script may steal cookie/session information or present users with fradulent web content. </li> 
+
+        <table class="galleryTable"><tr><td><img src="images/xssresult.png" alt="XSS Result" title="Client interface being hit by XSS Attack" /></td></tr></table>
+
+        <li>Resolution: A simple solution to this would be to ensure character escaping is done before saving the 
+            information into the database. It is especially important to escape characters with HTML entity encoding
+            (e.g. <code>& < > " ' /</code>) to prevent the execution of any form of scripts or event handlers. Also,
+            updating the current entires using <code>db.collection.update()</code> would also increase security.</li>
         </ul>
 
-        <h3>Issue #2 : Database Vulnerability</h3>
+        <h3>Issue #2 : Access to Every Data Entry in the Database</h3>
 
-        <img src="images/mongoattack.png" alt="MongoDB Vulnerability" title="Client interface being hit by MongoDB Attack" />
+        <ul>
+        <li>Location of Vulnerability: GET /checkins.json API can retrieve more data than it should be able to.</li>
+        
+        <li>Severity of Vulnerability: HIGH. Databases may contain confidential or secure information and there is a 
+            huge privacy and security problem any time a third-party is able to freely access all data in a database.
+            This problem is made even worse if the database stores raw (as opposed to encrypted) information -- one
+            may freely access the database and collect usernames, passwords, and other information.</li>
+
+        <li>Description of Vulnerability: By modifying the parameters of the GET /checkins.json request, I have been
+            about to make the server return to me all the entries in the database. The API expects a valid login (e.g. 
+            <code>https://dry-bastion-41529.herokuapp.com/checkins.json?login=Anthony</code>) but by using a modifier 
+            (<code>https://dry-bastion-41529.herokuapp.com/checkins.json?login[$ne]=" "</code>) the server instead 
+            returns all entries which are not empty. This is essentially the entire database unless you happen to have 
+            an empty field. 
+
+        <table class="galleryTable"><tr><td><img src="images/mongoattack.png" alt="MongoDB Vulnerability" title="Client interface being hit by MongoDB Attack" /></td></tr></table></li>
+
+        <li>Resolution: The most straightforward solution in this case would be to have an additional layer of checks
+            in the code before the database is queried. This would ensure that there have been no modifiers added to
+            the query and that the login requested is of valid type.</li>
+        </ul>
 
         <h3>Issue #3 : HTML Injections</h3>
 
@@ -75,6 +110,11 @@
         <img src="images/injectionresult.png" alt="Injection Result" title="Client interface being hit by Injection Attack" />
 
         <h3>Conclusion</h3>
+
+        <p>
+        Most of the security vulnerabilities in this web application are serious compromises, but they are all also relatively
+        easy fixes for anyone attempting to plug these security loopholes. 
+        </p>
 
 </body>
 
