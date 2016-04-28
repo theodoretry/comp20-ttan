@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+        <meta charset="utf-8" />
+        <title>Security and Privacy Assessment</title>
+        <link rel="stylesheet" href="security.css" type="text/css" />
+</head>
+
+<body>
+
+        <div id = "header">
+                <h1>Security and Privacy Assessment of Client-Side and Server-Side Code</h1>
+                <h2>Prepared By: Theodore Tan</h2>
+        </div>
+
+        <h3>Introduction</h3>
+
+        <p>
+        This Secuity Assesment documents the security and privacy vulnerabilities that exists in both
+        the client-side and server-side web applications designed by Anthony Nguyen (COMP 20, Spring 
+        2016). These web applications are Historic Landmarks and the server for Historic Landmarks
+        respectively. According to specifications, the server application had to (1) maintain location 
+        check-ins (login, lat, and long) for a long period of time, and (2) serves data on 
+        the nearest U.S. historic landmarks within a mile of where you are (where the user checked in
+        from). The client-side application would render a google map with the information returned by
+        the server.
+        </p>
+
+        <h3>Methodology</h3>
+
+        <p>
+        Security testing was carried out in two stages: black-box and code review/white-box testing.
+        The tools used for black-box testing were Mozilla Firefox's Tamper Data, Postman and curl.
+        Using just these tools, mutiple vulnerabilities were detected. A review of the source code
+        confirmed these loopholes.
+        </p>
+
+        <h3>Abstract of Findings</h3>
+
+        <p>
+        The application does have some safeguards against input that may cause it to crash (e.g. it 
+        checks for appropriate latitude and longtitude values). However, the bulk of its security
+        issues stem from the fact that it fails to check and validate user input before it is accepted. 
+        As a result, malicious users will be able to manipulate the data sent to the application to
+        acheive unwanted and dangerous results.
+        </p>
+
+        <h3>Issue #1 : Cross Site Scripting</h3>
+
+        <ul>
+        <li>Location of Vulnerability: GET API executes javascript posted to the server by a malicious source</li>
+        <li>Severity of Vulnerability: HIGH. XSS is one of the biggest security loopholes in the present day.
+            It may possibly compromise clients who expect the server to be secure, as malicious javascript can
+            be exected in their browser upon GET request.</li>
+        <li>Description of Vulnerability: 
+
+        <img src="images/xssattack.png" alt="XSS Attack" title="Postman interface to make XSS attack" />
+
+        <img src="images/xssresult.png" alt="XSS Result" title="Client interface being hit by XSS Attack" />
+
+        </li>
+        <li>Resolution: </li>
+        </ul>
+
+        <h3>Issue #2 : Database Vulnerability</h3>
+
+        <img src="images/mongoattack.png" alt="MongoDB Vulnerability" title="Client interface being hit by MongoDB Attack" />
+
+        <h3>Issue #3 : HTML Injections</h3>
+
+        <img src="images/injectionattack.png" alt="Injection Attack" title="Postman interface to make Injection Attack" />
+
+        <img src="images/injectionresult.png" alt="Injection Result" title="Client interface being hit by Injection Attack" />
+
+        <h3>Conclusion</h3>
+
+</body>
+
+</html>

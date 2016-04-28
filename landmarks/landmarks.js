@@ -35,7 +35,7 @@ function setMyLocation() {
 
 function parse() {
         params = "login=" + myLogin + "&lat=" + myLat + "&lng=" + myLong;
-        request.open("POST", "https://defense-in-derpth.herokuapp.com/sendLocation", true);
+        request.open("POST", "https://fathomless-waters-11607.herokuapp.com/sendLocation", true);
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         request.onreadystatechange = function() {
